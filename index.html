@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML &amp; CSS Test Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #171b26;
+    --panel: #1f2434;
+    --panel-2: #262c40;
+    --line: #343c56;
+    --text: #e7e9f2;
+    --muted: #93a0c2;
+    --amber: #e8a33d;
+    --teal: #59c2c2;
+    --green: #6fce8f;
+    --red: #ea6a63;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(89,194,194,0.08), transparent 40%),
+      radial-gradient(circle at 85% 100%, rgba(232,163,61,0.08), transparent 40%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 60px;
+  }
+  .wrap{width:100%;max-width:720px;}
+
+  .tagline{
+    font-family:var(--mono);
+    color:var(--muted);
+    font-size:13px;
+    letter-spacing:0.02em;
+    margin:0 0 6px;
+  }
+  .tagline span{color:var(--amber);}
+  h1{
+    font-family:var(--mono);
+    font-size:clamp(26px,5vw,34px);
+    font-weight:800;
+    margin:0 0 22px;
+    line-height:1.25;
+  }
+  h1 .tag{color:var(--teal);}
+  h1 .close{color:var(--muted);}
+
+  /* ---------- Start screen ---------- */
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:28px;
+  }
+  .topics{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:18px 0 26px;
+  }
+  .topics span{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--teal);
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    padding:5px 10px;
+    border-radius:6px;
+  }
+  .lede{color:var(--muted);font-size:15px;line-height:1.65;margin:0 0 4px;}
+
+  .btn{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:15px;
+    background:var(--amber);
+    color:#221605;
+    border:none;
+    border-radius:8px;
+    padding:14px 22px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .btn:hover{background:#f0b155;transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+  .btn.ghost{
+    background:transparent;
+    color:var(--teal);
+    border:1px solid var(--line);
+  }
+  .btn.ghost:hover{background:var(--panel-2);}
+  .btn:focus-visible, .opt:focus-visible, select:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:2px;
+  }
+
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+
+  .count-select{
+    font-family:var(--mono);
+    background:var(--panel-2);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:13px 14px;
+    font-size:14px;
+  }
+
+  /* ---------- Quiz screen ---------- */
+  #quizScreen, #resultScreen{display:none;}
+  .progress-track{
+    height:6px;
+    width:100%;
+    background:var(--panel-2);
+    border-radius:99px;
+    overflow:hidden;
+    margin-bottom:10px;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--teal), var(--amber));
+    width:0%;
+    transition:width .35s ease;
+  }
+  .meta-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:22px;
+  }
+  .meta-row .score{color:var(--green);}
+
+  .qcat{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:lowercase;
+    color:var(--amber);
+    background:rgba(232,163,61,0.1);
+    border:1px solid rgba(232,163,61,0.3);
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:5px;
+    margin-bottom:14px;
+  }
+  .qtext{
+    font-size:19px;
+    font-weight:600;
+    line-height:1.5;
+    margin:0 0 20px;
+  }
+  .qtext code, .qtext-code{
+    font-family:var(--mono);
+    background:var(--panel-2);
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:0.88em;
+    color:var(--teal);
+  }
+  .code-block{
+    display:block;
+    font-family:var(--mono);
+    background:#12151f;
+    border:1px solid var(--line);
+    color:#c9d6f0;
+    font-size:13.5px;
+    line-height:1.6;
+    padding:14px 16px;
+    border-radius:8px;
+    margin:14px 0 4px;
+    overflow-x:auto;
+    white-space:pre;
+    font-weight:400;
+  }
+
+  .options{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+  .opt{
+    text-align:left;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:8px;
+    padding:14px 16px;
+    font-family:var(--sans);
+    font-size:15px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opt code{font-family:var(--mono);color:var(--teal);}
+  .opt:hover:not(:disabled){border-color:var(--teal);}
+  .opt .letter{
+    font-family:var(--mono);
+    font-weight:700;
+    color:var(--muted);
+    width:20px;
+    flex-shrink:0;
+  }
+  .opt:disabled{cursor:default;}
+  .opt.correct{border-color:var(--green);background:rgba(111,206,143,0.12);}
+  .opt.correct .letter{color:var(--green);}
+  .opt.wrong{border-color:var(--red);background:rgba(234,106,99,0.12);}
+  .opt.wrong .letter{color:var(--red);}
+
+  .explain{
+    display:none;
+    font-size:14px;
+    line-height:1.6;
+    color:var(--muted);
+    background:var(--panel-2);
+    border-left:3px solid var(--teal);
+    padding:12px 14px;
+    border-radius:6px;
+    margin-bottom:20px;
+  }
+  .explain b, .explain hl{color:var(--text);font-weight:700;font-style:normal;}
+
+  .nav-row{display:flex;justify-content:flex-end;}
+
+  /* ---------- Results ---------- */
+  .score-big{
+    font-family:var(--mono);
+    font-size:56px;
+    font-weight:800;
+    color:var(--amber);
+    margin:6px 0 2px;
+  }
+  .score-sub{color:var(--muted);font-size:15px;margin:0 0 26px;}
+  .breakdown{margin:0 0 26px;padding:0;list-style:none;}
+  .breakdown li{
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--muted);
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .breakdown li b{color:var(--text);}
+  .review-item{
+    border-top:1px solid var(--line);
+    padding:16px 0;
+  }
+  .review-item p{margin:0 0 8px;font-size:14.5px;}
+  .review-item .ans{font-size:13px;color:var(--muted);}
+  .review-item .ans b.ok{color:var(--green);}
+  .review-item .ans b.no{color:var(--red);}
+
+  footer.note{
+    text-align:center;
+    color:var(--muted);
+    font-family:var(--mono);
+    font-size:12px;
+    margin-top:24px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="tagline">&lt;prep <span>type</span>="html-css"&gt;</p>
+  <h1><span class="tag">&lt;</span>Test Ready<span class="tag">/&gt;</span></h1>
+
+  <!-- START SCREEN -->
+  <div id="startScreen" class="card">
+    <p class="lede">A fresh, randomized set of multiple-choice questions pulled from a bank covering the basics through the fine print — box model, semantic tags, tables, forms, lists, links, media, layout units, specificity, and more.</p>
+    <div class="topics" id="topicChips"></div>
+    <div class="row" style="margin-bottom:20px;">
+      <select id="countSelect" class="count-select">
+        <option value="15" selected>15 questions</option>
+        <option value="10">10 questions</option>
+        <option value="20">20 questions</option>
+        <option value="30">30 questions</option>
+        <option value="50">50 questions</option>
+        <option value="75">75 questions</option>
+        <option value="999">Full bank (every question)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="startQuiz()">Start quiz →</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen" class="card">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="meta-row">
+      <span id="qPosition">Question 1 / 15</span>
+      <span class="score" id="liveScore">Score: 0</span>
+    </div>
+    <div class="qcat" id="qCat">category</div>
+    <p class="qtext" id="qText">Question text</p>
+    <div class="options" id="optionsBox"></div>
+    <div class="explain" id="explainBox"></div>
+    <div class="nav-row">
+      <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="resultScreen" class="card">
+    <p class="lede" style="margin-bottom:0;">You scored</p>
+    <p class="score-big" id="finalScore">0 / 15</p>
+    <p class="score-sub" id="finalPct">0% correct</p>
+    <ul class="breakdown" id="catBreakdown"></ul>
+    <div class="row">
+      <button class="btn" onclick="restart()">New random quiz →</button>
+      <button class="btn ghost" id="reviewToggle" onclick="toggleReview()">Review missed questions</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+  <footer class="note">every attempt reshuffles the question set and answer order — no two quizzes match</footer>
+</div>
+
+<script>
+/* ============================= QUESTION BANK ============================= */
+/* Each question: { cat, q, options:[...], correct: index, exp } */
+const BANK = [
+
+// ---- Document structure / basics ----
+{cat:"structure", q:"Which tag must be the very first line of a valid HTML5 document?", options:["<html>","<!DOCTYPE html>","<head>","<meta charset=\"UTF-8\">"], correct:1, exp:"<hl>&lt;!DOCTYPE html&gt;</hl> tells the browser to render the page in standards mode. It isn't an HTML tag itself, but it must come before &lt;html&gt;."},
+{cat:"structure", q:"What does the <code>lang=\"en\"</code> attribute on <code>&lt;html&gt;</code> control?", options:["The default font of the page","The character encoding used","The language of the page's content, for accessibility and translation tools","Whether the page reads left-to-right"], correct:2, exp:"<hl>lang</hl> tells screen readers and browsers what language the content is in, which affects pronunciation and translation prompts."},
+{cat:"structure", q:"Where does <code>&lt;meta charset=\"UTF-8\"&gt;</code> belong?", options:["Inside <body>","Inside <head>","As an attribute of <html>","Anywhere in the document"], correct:1, exp:"Meta tags describing the document (charset, viewport, title) live inside <hl>&lt;head&gt;</hl>, not the visible body."},
+{cat:"structure", q:"What is the purpose of the viewport meta tag <code>width=device-width, initial-scale=1.0</code>?", options:["Sets a fixed page width of 1 pixel","Makes the page responsive by matching the device's screen width and default zoom","Disables zooming entirely","Sets the language of the viewport"], correct:1, exp:"It matches the layout viewport to the device width and sets the initial zoom level to 100%, which is essential for responsive design."},
+{cat:"structure", q:"An HTML comment is written as:", options:["// comment","<!-- comment -->","/* comment */","# comment"], correct:1, exp:"HTML comments use <code>&lt;!-- ... --&gt;</code>. Content inside is not rendered but is visible in page source."},
+
+// ---- Text / headings ----
+{cat:"text", q:"How many levels of heading tags does HTML provide by default?", options:["3 (h1–h3)","4 (h1–h4)","6 (h1–h6)","Unlimited"], correct:2, exp:"HTML defines six heading levels, <code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>, with h1 being the most important."},
+{cat:"text", q:"Which tag makes text bold while also giving it semantic 'strong importance'?", options:["<b>","<i>","<strong>","<em>"], correct:2, exp:"<code>&lt;strong&gt;</code> renders bold like <code>&lt;b&gt;</code> but also communicates importance to assistive tech, unlike the purely presentational <code>&lt;b&gt;</code>."},
+{cat:"text", q:"Which tag is used purely for presentational italics with no semantic emphasis, as opposed to <code>&lt;em&gt;</code>?", options:["<u>","<i>","<mark>","<small>"], correct:1, exp:"<code>&lt;i&gt;</code> italicizes text for stylistic reasons (like a term or name) without implying emphasis, while <code>&lt;em&gt;</code> implies stressed emphasis."},
+
+// ---- Semantic layout (kk.html) ----
+{cat:"semantic", q:"Which element is meant to hold introductory content for a page or section, like a title and tagline?", options:["<header>","<aside>","<footer>","<section>"], correct:0, exp:"<code>&lt;header&gt;</code> groups introductory content — headings, logos, taglines — at the top of a page or section."},
+{cat:"semantic", q:"In a personal site, tangential content like a 'favourite websites' list would best belong inside:", options:["<article>","<aside>","<main>","<nav>"], correct:1, exp:"<code>&lt;aside&gt;</code> is meant for content only loosely related to the surrounding main content, such as related links or extra notes."},
+{cat:"semantic", q:"Which tag semantically wraps self-contained content that could stand on its own, like a blog post or news item?", options:["<section>","<div>","<article>","<span>"], correct:2, exp:"<code>&lt;article&gt;</code> represents independent, self-contained content that would still make sense if syndicated elsewhere on its own."},
+{cat:"semantic", q:"What is the main practical difference between <code>&lt;section&gt;</code> and <code>&lt;div&gt;</code>?", options:["<section> is only for tables","<section> carries semantic meaning (a thematic grouping) while <div> is a generic, non-semantic container","<div> cannot contain headings","There is no difference"], correct:1, exp:"<code>&lt;section&gt;</code> groups thematically related content and has meaning for accessibility tools; <code>&lt;div&gt;</code> is purely a styling/structural hook with no semantic weight."},
+{cat:"semantic", q:"Where would copyright text like \"© 2024 Deepanshu Tiwari\" typically be placed?", options:["<header>","<nav>","<footer>","<aside>"], correct:2, exp:"<code>&lt;footer&gt;</code> holds closing information for a page or section — copyright, author info, related links."},
+{cat:"semantic", q:"Which element groups the primary navigation links of a site?", options:["<menu>","<nav>","<links>","<header>"], correct:1, exp:"<code>&lt;nav&gt;</code> is the semantic element for a block of major navigation links."},
+
+// ---- Links / anchors ----
+{cat:"links", q:"Which anchor attribute opens the link in a new browser tab?", options:["new=\"true\"","target=\"_blank\"","open=\"tab\"","rel=\"new\""], correct:1, exp:"<code>target=\"_blank\"</code> tells the browser to open the linked resource in a new tab or window."},
+{cat:"links", q:"How do you create a link that opens the user's email client to send a message?", options:["<a href=\"email:address\">","<a href=\"mailto:address\">","<a mail=\"address\">","<a href=\"#email\">"], correct:1, exp:"The <code>mailto:</code> URL scheme, e.g. <code>href=\"mailto:name@example.com\"</code>, opens the default email client."},
+{cat:"links", q:"Which href scheme creates a click-to-call phone link on mobile devices?", options:["href=\"call:...\"","href=\"phone:...\"","href=\"tel:...\"","href=\"dial:...\"" ], correct:2, exp:"The <code>tel:</code> scheme, e.g. <code>href=\"tel:+917607387475\"</code>, lets mobile browsers initiate a phone call."},
+{cat:"links", q:"An anchor tag with no <code>href</code> attribute at all is:", options:["Invalid HTML and won't render","Still clickable but not a real hyperlink (no navigation, no default link styling behavior)","Automatically treated as a button","The same as target=\"_self\""], correct:1, exp:"Without <code>href</code>, an <code>&lt;a&gt;</code> is still valid but isn't a navigable hyperlink — it won't be keyboard-focusable as a link or get the browser's default link behavior."},
+
+// ---- Images ----
+{cat:"images", q:"What is the purpose of the <code>alt</code> attribute on an <code>&lt;img&gt;</code> tag?", options:["Sets the image's alignment","Provides alternative text for screen readers and for when the image fails to load","Sets the image's file format","Adds a tooltip only, with no accessibility role"], correct:1, exp:"<code>alt</code> gives a text alternative used by screen readers and shown if the image can't load — important for accessibility and SEO."},
+{cat:"images", q:"In <code>&lt;img src=\"pic.jpg\" width=\"150\" height=\"150\"&gt;</code>, what do width/height (without units) refer to?", options:["Percentages of the parent","Centimeters","Pixels","Ems"], correct:2, exp:"Unitless numeric width/height attributes on <img> are interpreted as pixels."},
+{cat:"images", q:"Which CSS property is used to set a background picture on an element, as opposed to an <code>&lt;img&gt;</code> tag?", options:["background-image","background-src","image-background","src-background"], correct:0, exp:"<code>background-image: url(...)</code> sets a CSS background picture, distinct from the semantic, accessible <code>&lt;img&gt;</code> element."},
+
+// ---- Lists ----
+{cat:"lists", q:"What does <code>&lt;ol type=\"A\" start=\"1\"&gt;</code> do?", options:["Numbers items 1,2,3 starting at item A","Marks list items with uppercase letters (A, B, C...) beginning from the first letter","Creates an unordered list styled with letters","Has no visible effect"], correct:1, exp:"<code>type=\"A\"</code> switches the marker style to uppercase letters, and <code>start</code> sets which position in that sequence numbering begins from."},
+{cat:"lists", q:"Which list type is the right semantic choice when the order of items doesn't matter?", options:["<ol>","<ul>","<dl>","<li>"], correct:1, exp:"<code>&lt;ul&gt;</code> (unordered list) is for items with no inherent sequence; <code>&lt;ol&gt;</code> is for sequences where order matters."},
+{cat:"lists", q:"Can a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> be nested inside a single <code>&lt;li&gt;</code> of another list?", options:["No, lists cannot be nested","Yes, a nested list is valid inside a parent list item","Only <ol> can nest inside <ul>","Only up to one level of nesting is allowed, ever"], correct:1, exp:"Nesting a <ul>/<ol> inside an <li> is valid HTML and is the standard way to create sub-lists."},
+{cat:"lists", q:"Every <code>&lt;li&gt;</code> item must appear directly inside which parent elements?", options:["<div> or <span>","<ul>, <ol>, or <menu>","<table>","<section> only"], correct:1, exp:"<code>&lt;li&gt;</code> is only valid as a direct child of list containers: <ul>, <ol>, or <menu>."},
+
+// ---- Tables ----
+{cat:"tables", q:"What does the <code>colspan=\"3\"</code> attribute on a <code>&lt;th&gt;</code> do?", options:["Makes the cell span 3 rows vertically","Makes the cell span 3 columns horizontally","Sets the column width to 3px","Splits the cell into 3 sub-cells"], correct:1, exp:"<code>colspan</code> merges a cell across the given number of columns horizontally. Its vertical counterpart is <code>rowspan</code>."},
+{cat:"tables", q:"What does <code>rowspan=\"2\"</code> on a <code>&lt;th&gt;</code> do?", options:["Spans the cell across 2 columns","Spans the cell down across 2 rows","Repeats the row twice","Adds 2px of row height"], correct:1, exp:"<code>rowspan</code> merges a cell vertically down through the given number of rows."},
+{cat:"tables", q:"What is the correct nesting order for a basic HTML table row of data?", options:["<table> > <td> > <tr>","<table> > <tr> > <td>","<tr> > <table> > <td>","<td> > <tr> > <table>"], correct:1, exp:"A table contains rows (<code>&lt;tr&gt;</code>), and each row contains cells (<code>&lt;td&gt;</code> for data or <code>&lt;th&gt;</code> for headers)."},
+{cat:"tables", q:"What's the semantic difference between <code>&lt;th&gt;</code> and <code>&lt;td&gt;</code>?", options:["No difference, purely stylistic","<th> is a header cell (bold, centered by default, semantic header); <td> is a standard data cell","<td> can only hold numbers","<th> can only appear in the first row"], correct:1, exp:"<code>&lt;th&gt;</code> marks a cell as a header for its row/column, which browsers style as bold/centered by default and which assistive tech associates with related data cells."},
+{cat:"tables", q:"Which attribute on <code>&lt;table&gt;</code> adds spacing between adjacent cells (outside each cell's border)?", options:["cellpadding","cellspacing","border-spacing-html","gap"], correct:1, exp:"<code>cellspacing</code> is the legacy HTML attribute for space between cells; <code>cellpadding</code> instead adds space inside each cell around its content."},
+
+// ---- Forms ----
+{cat:"forms", q:"Which element groups related form fields together and can display a caption via <code>&lt;legend&gt;</code>?", options:["<group>","<fieldset>","<form-group>","<section>"], correct:1, exp:"<code>&lt;fieldset&gt;</code> visually and semantically groups related controls, and <code>&lt;legend&gt;</code> provides its caption."},
+{cat:"forms", q:"What does the <code>for</code> attribute on a <code>&lt;label&gt;</code> do?", options:["Sets the label's font","Associates the label with a form control that shares the same id, so clicking the label focuses that control","Sets a tooltip on the label","Requires the field to be filled"], correct:1, exp:"<code>for=\"id\"</code> links a label to the input with the matching <code>id</code>, improving accessibility and click targets."},
+{cat:"forms", q:"Which input type restricts entry to values shaped like a date and time together?", options:["<input type=\"date\">","<input type=\"time\">","<input type=\"datetime-local\">","<input type=\"timestamp\">"], correct:2, exp:"<code>datetime-local</code> gives a combined date-and-time picker without timezone info, unlike the date-only or time-only types."},
+{cat:"forms", q:"To let multiple radio buttons be mutually exclusive (only one selectable at a time), what must they share?", options:["The same id","The same name attribute","The same value","The same class"], correct:1, exp:"Radio inputs with the same <code>name</code> form a group where only one can be selected at once."},
+{cat:"forms", q:"Which input type lets a user pick a color via a native color-picker UI?", options:["<input type=\"color\">","<input type=\"palette\">","<input type=\"pick\">","<input type=\"swatch\">"], correct:0, exp:"<code>type=\"color\"</code> renders a native color swatch/picker control."},
+{cat:"forms", q:"Why is <code>&lt;textarea&gt;</code> used instead of <code>&lt;input type=\"text\"&gt;</code> for something like an address?", options:["textarea is faster to render","textarea allows multi-line input, sized with rows/cols, unlike the single-line text input","There's no real difference","input cannot accept letters"], correct:1, exp:"<code>&lt;textarea&gt;</code> supports multi-line text and its visible size is set with <code>rows</code>/<code>cols</code>, while a text input is a single line."},
+{cat:"forms", q:"Which input type is appropriate for a password field so characters are masked as they're typed?", options:["type=\"text\"","type=\"hidden\"","type=\"password\"","type=\"secure\""], correct:2, exp:"<code>type=\"password\"</code> masks entered characters and hints password managers appropriately."},
+{cat:"forms", q:"A <code>&lt;select&gt;</code> dropdown's choices are defined using which child element?", options:["<item>","<choice>","<option>","<select-item>"], correct:2, exp:"Each selectable choice inside a <code>&lt;select&gt;</code> is an <code>&lt;option&gt;</code> element."},
+
+// ---- Media / embeds ----
+{cat:"media", q:"Which element embeds another web page (like a Google Map or YouTube video) inside the current page?", options:["<embed>","<iframe>","<object>","<frame>"], correct:1, exp:"<code>&lt;iframe&gt;</code> embeds another HTML document inline; the older <code>&lt;frame&gt;</code> element (used with framesets) is obsolete."},
+{cat:"media", q:"What does <code>loading=\"lazy\"</code> on an <code>&lt;iframe&gt;</code> or <code>&lt;img&gt;</code> do?", options:["Slows down the whole page intentionally","Defers loading the resource until it's near the viewport, improving initial page performance","Disables the resource entirely","Loads the resource twice for reliability"], correct:1, exp:"Lazy loading defers off-screen resources until the user scrolls near them, reducing initial load time."},
+
+// ---- CSS basics: selectors, specificity ----
+{cat:"selectors", q:"In CSS, what does <code>#one { color: red; }</code> select?", options:["Every element with class 'one'","The single element with id 'one'","Every <div> element","The first element on the page"], correct:1, exp:"A hash (<code>#</code>) selector targets the element whose <code>id</code> attribute matches — ids should be unique per page."},
+{cat:"selectors", q:"In CSS, what does <code>.one { color: red; }</code> select?", options:["The element with id 'one'","Every element that has class=\"one\"","Only <p> tags","Nothing, dot selectors are invalid"], correct:1, exp:"A dot (<code>.</code>) selector matches every element carrying that class, and a class can be reused on many elements."},
+{cat:"selectors", q:"If an element has both a matching id rule and a matching class rule with conflicting styles, which one wins by default specificity rules?", options:["The class rule always wins","The id rule wins, because id selectors have higher specificity than class selectors","Whichever rule is written first in the file","They average the two values"], correct:1, exp:"CSS specificity ranks id selectors above class selectors (above element/type selectors), so an id rule overrides a class rule on the same element, all else being equal."},
+{cat:"selectors", q:"Which has the lowest specificity: an id selector, a class selector, or a type/tag selector (like <code>h3</code>)?", options:["Id selector","Class selector","Type/tag selector","They are all equal"], correct:2, exp:"Specificity order from lowest to highest is roughly: type selectors < class/attribute selectors < id selectors < inline styles."},
+{cat:"selectors", q:"What overrides both external stylesheet rules and internal <code>&lt;style&gt;</code> rules for the same element (barring <code>!important</code>)?", options:["A comment in the CSS","An inline style attribute directly on the element","A rule placed at the very top of the file","Nothing can override external CSS"], correct:1, exp:"Inline styles (<code>style=\"...\"</code> on the element itself) have the highest specificity of ordinary CSS, overriding both internal and external stylesheet rules."},
+{cat:"selectors", q:"Between an internal <code>&lt;style&gt;</code> block and a linked external stylesheet with equal specificity, which rule wins?", options:["The internal style always wins regardless of order","Whichever one appears later in the document's load order wins","The external stylesheet always wins","Neither applies; both are ignored"], correct:1, exp:"When specificity is tied, the rule that comes later in source/load order takes precedence — so a <link> after a <style> block (or vice versa) determines the winner."},
+
+// ---- CSS units / sizing ----
+{cat:"units", q:"What does a CSS length in <code>vh</code> represent?", options:["A percentage of the element's own height","A percentage of the viewport's height","A fixed pixel value","The font's height"], correct:1, exp:"<code>1vh</code> equals 1% of the current viewport's height, making it useful for full-screen-height layouts."},
+{cat:"units", q:"What does a CSS length in <code>vw</code> represent?", options:["A percentage of the viewport's width","The width of a single character 'v'","A percentage of the parent element's width","A fixed unit equal to 1cm"], correct:0, exp:"<code>1vw</code> equals 1% of the viewport's width, so <code>width:100vw</code> spans the full browser window width."},
+{cat:"units", q:"What is the key difference between <code>em</code> and <code>rem</code> units?", options:["They are identical","em is relative to the font-size of its parent element; rem is always relative to the root (<html>) font-size","rem is relative to the viewport; em is a fixed size","em only works on text, rem only works on layout"], correct:1, exp:"<code>em</code> scales relative to the nearest parent's font-size (compounding through nesting), while <code>rem</code> always scales relative to the root element's font-size, avoiding compounding."},
+{cat:"units", q:"Setting <code>height: 50%</code> on a child element requires what to actually take effect predictably?", options:["Nothing extra is ever needed","The parent element needs an explicitly defined height for the percentage to resolve against","The child must also have width:50%","Percentage heights are not supported in CSS"], correct:1, exp:"Percentage heights are calculated against the parent's height; if the parent has no defined height, the percentage often computes to nothing."},
+{cat:"units", q:"Which CSS property controls the roundness of an element's corners, e.g. turning a square into a circle at 50%?", options:["corner-radius","border-radius","round-corners","box-radius"], correct:1, exp:"<code>border-radius: 50%</code> on a perfect square turns it into a circle; smaller percentages produce softer rounded corners."},
+
+// ---- Box model / layout ----
+{cat:"boxmodel", q:"Which CSS property changes the background color of an element?", options:["color","background-color","bg-color","fill"], correct:1, exp:"<code>background-color</code> sets an element's background fill; <code>color</code> instead sets the text color."},
+{cat:"boxmodel", q:"To center a block of content both horizontally and vertically inside its parent, which modern approach is most reliable?", options:["Using the obsolete <center> tag","display:flex on the parent with align-items:center and justify-content:center","Only text-align:center","Setting margin:auto with no other rules"], correct:1, exp:"Flexbox with <code>align-items:center; justify-content:center</code> reliably centers a child both vertically and horizontally, and is the modern replacement for the deprecated <code>&lt;center&gt;</code> tag."},
+{cat:"boxmodel", q:"What is the effect of <code>display:flex</code> on an element?", options:["It hides the element","It turns the element into a flex container, laying out its direct children along a flexible row or column axis","It makes the element circular","It disables all CSS on children"], correct:1, exp:"<code>display:flex</code> makes an element a flex container; its direct children become flex items that can be aligned, spaced, and reordered along a main axis."},
+{cat:"boxmodel", q:"Which HTML attribute for setting background color (e.g. <code>bgcolor=\"pink\"</code>) is considered outdated in favor of CSS?", options:["style","bgcolor","class","id"], correct:1, exp:"<code>bgcolor</code> is a legacy presentational HTML attribute; modern practice uses the CSS <code>background-color</code> property instead, keeping style separate from structure."},
+
+// ---- Miscellaneous / general ----
+{cat:"general", q:"What is the correct way to link an external stylesheet named <code>index.css</code> in the <code>&lt;head&gt;</code>?", options:["<style src=\"index.css\">","<link rel=\"stylesheet\" href=\"./index.css\">","<css href=\"index.css\">","<script src=\"index.css\">"], correct:1, exp:"External stylesheets are linked with <code>&lt;link rel=\"stylesheet\" href=\"...\"&gt;</code> inside the head."},
+{cat:"general", q:"If both an internal <code>&lt;style&gt;</code> block and a linked stylesheet set the same property with equal specificity, and the <code>&lt;link&gt;</code> appears before the <code>&lt;style&gt;</code> block in the head, which wins?", options:["The linked external stylesheet","The internal <style> block, since it comes later in source order","Neither, they cancel out","The browser picks randomly"], correct:1, exp:"With equal specificity, later-declared rules win — so a <style> block placed after the <link> in the document overrides it."},
+{cat:"general", q:"Which of these is a block-level element by default?", options:["<span>","<a>","<div>","<b>"], correct:2, exp:"<code>&lt;div&gt;</code> is block-level by default (takes full available width, starts on a new line); <span>, <a>, and <b> are inline by default."},
+{cat:"general", q:"Which of these is an inline element by default?", options:["<div>","<section>","<span>","<p>"], correct:2, exp:"<code>&lt;span&gt;</code> is inline by default — it doesn't force a line break and only takes up as much width as its content."},
+{cat:"general", q:"What does the <code>target=\"_blank\"</code> attribute combine well with for security reasons, to prevent the new page from controlling the original tab?", options:["rel=\"noopener\"","download=\"true\"","href=\"#\"","loading=\"lazy\""], correct:0, exp:"Adding <code>rel=\"noopener\"</code> (often with <code>noreferrer</code>) prevents the newly opened page from accessing <code>window.opener</code>, closing a known security gap."},
+{cat:"general", q:"What is the purpose of the <code>placeholder</code> attribute on an <code>&lt;input&gt;</code>?", options:["Sets the input's required value","Shows greyed-out hint text inside the field that disappears once the user types","Pre-fills the field permanently","Validates the input format"], correct:1, exp:"<code>placeholder</code> displays hint text inside an empty field; it is not a real value and is not submitted with the form."},
+
+// ---- Predict the output: code given, guess what renders/happens ----
+{cat:"predict", q:"What text color will the paragraph show?<pre class=\"code-block\">&lt;style&gt;\n  #para { color: green; }\n  .txt { color: red; }\n&lt;/style&gt;\n&lt;p id=\"para\" class=\"txt\"&gt;Hello&lt;/p&gt;</pre>", options:["Red, because .txt is defined after #para","Green, because id selectors have higher specificity than class selectors","Black, the default text color","It alternates between red and green"], correct:1, exp:"ID selectors outrank class selectors regardless of source order, so <code>#para</code>'s green wins over <code>.txt</code>'s red."},
+{cat:"predict", q:"Predict the rendered color (assume <code>.a</code> is written before <code>.b</code> in the stylesheet).<pre class=\"code-block\">&lt;style&gt;\n  .a { color: blue; }\n  .b { color: orange; }\n&lt;/style&gt;\n&lt;p class=\"a b\"&gt;Text&lt;/p&gt;</pre>", options:["Blue, because .a appears first in the HTML class attribute","Orange, because .b is declared later in the stylesheet and both classes have equal specificity","Both colors blend together","Neither applies; text stays black"], correct:1, exp:"With equal specificity (both are single-class selectors), the rule that appears later in the stylesheet wins — the order of class names inside the HTML class attribute has no effect."},
+{cat:"predict", q:"What color is the text?<pre class=\"code-block\">&lt;p style=\"color: purple;\" class=\"note\"&gt;Hi&lt;/p&gt;\n&lt;style&gt;\n  .note { color: teal; }\n&lt;/style&gt;</pre>", options:["Teal, because the class rule comes after in the document","Purple, because inline styles have higher specificity than any class or id selector","Black, since the two rules cancel out","Teal, because it's inside a <style> block"], correct:1, exp:"Inline styles beat class and id selectors from stylesheets, so the inline purple wins over the .note rule's teal."},
+{cat:"predict", q:"Which color wins?<pre class=\"code-block\">&lt;style&gt;\n  p { color: black; }\n  #msg { color: crimson; }\n  .highlight { color: gold; }\n&lt;/style&gt;\n&lt;p id=\"msg\" class=\"highlight\"&gt;Alert&lt;/p&gt;</pre>", options:["Black, since the type selector is listed first","Gold, since .highlight is the most specific rule available","Crimson, because an id selector outranks both a class selector and a type selector","They average into grey"], correct:2, exp:"Specificity ranks id > class > type selectors, so <code>#msg</code>'s crimson beats both <code>.highlight</code>'s gold and <code>p</code>'s black."},
+{cat:"predict", q:"Given this nesting, what is the actual computed font-size of the innermost text?<pre class=\"code-block\">&lt;style&gt;\n  html { font-size: 16px; }\n  .outer { font-size: 2em; }\n  .inner { font-size: 2em; }\n&lt;/style&gt;\n&lt;div class=\"outer\"&gt;\n  &lt;div class=\"inner\"&gt;Text&lt;/div&gt;\n&lt;/div&gt;</pre>", options:["32px","64px","16px","2px"], correct:1, exp:"em compounds: .outer becomes 2×16px = 32px, then .inner is 2× ITS parent's computed 32px = 64px, since em is always relative to the nearest parent's font-size."},
+{cat:"predict", q:"Same nesting, but using rem instead of em — what is the innermost font-size now?<pre class=\"code-block\">&lt;style&gt;\n  html { font-size: 16px; }\n  .outer { font-size: 2rem; }\n  .inner { font-size: 2rem; }\n&lt;/style&gt;\n&lt;div class=\"outer\"&gt;\n  &lt;div class=\"inner\"&gt;Text&lt;/div&gt;\n&lt;/div&gt;</pre>", options:["64px","32px","16px","8px"], correct:1, exp:"rem always refers to the root (&lt;html&gt;) font-size of 16px, so 2rem = 32px at any nesting depth — it doesn't compound the way em does."},
+{cat:"predict", q:"With the default box-sizing (content-box), what is the total rendered width of this div?<pre class=\"code-block\">&lt;style&gt;\n  div {\n    width: 200px;\n    padding: 20px;\n    border: 5px solid black;\n  }\n&lt;/style&gt;\n&lt;div&gt;Box&lt;/div&gt;</pre>", options:["200px","225px","250px","260px"], correct:2, exp:"In content-box (the default), width sets only the content area. Total width = 200 + padding(20×2) + border(5×2) = 200+40+10 = 250px."},
+{cat:"predict", q:"Same box, but with <code>box-sizing: border-box;</code> added. What is the total rendered width now?<pre class=\"code-block\">&lt;style&gt;\n  div {\n    box-sizing: border-box;\n    width: 200px;\n    padding: 20px;\n    border: 5px solid black;\n  }\n&lt;/style&gt;\n&lt;div&gt;Box&lt;/div&gt;</pre>", options:["250px","200px","240px","220px"], correct:1, exp:"border-box makes the declared width include padding and border, so the element's total rendered width stays exactly 200px — the content area just shrinks to fit."},
+{cat:"predict", q:"On a browser window that is 1200px wide and 800px tall, how wide (in pixels) is an element with <code>width: 50vw;</code>?", options:["50px","400px","600px","800px"], correct:2, exp:"1vw equals 1% of the viewport's width. 50vw = 50% of 1200px = 600px."},
+{cat:"predict", q:"On that same 1200×800 window, how tall is an element with <code>height: 25vh;</code>?", options:["25px","200px","300px","400px"], correct:1, exp:"1vh equals 1% of the viewport's height. 25vh = 25% of 800px = 200px."},
+{cat:"predict", q:"Given this markup, how many extra cells does the second row actually need to supply?<pre class=\"code-block\">&lt;table&gt;\n  &lt;tr&gt;\n    &lt;th rowspan=\"2\"&gt;Name&lt;/th&gt;\n    &lt;th&gt;Age&lt;/th&gt;\n  &lt;/tr&gt;\n  &lt;tr&gt;\n    &lt;td&gt;23&lt;/td&gt;\n  &lt;/tr&gt;\n&lt;/table&gt;</pre>", options:["2 more cells are needed","Just 1 more cell — 'Name' already occupies a slot in row 2 via rowspan","The table is broken, rowspan isn't valid on <th>","0 cells are needed"], correct:1, exp:"rowspan=\"2\" makes the 'Name' header cell occupy a column slot in both row 1 and row 2, so row 2 only needs to supply its one remaining cell."},
+{cat:"predict", q:"How many columns wide does this table appear overall?<pre class=\"code-block\">&lt;table&gt;\n  &lt;tr&gt;\n    &lt;th colspan=\"3\"&gt;Header&lt;/th&gt;\n  &lt;/tr&gt;\n  &lt;tr&gt;\n    &lt;td&gt;A&lt;/td&gt;&lt;td&gt;B&lt;/td&gt;&lt;td&gt;C&lt;/td&gt;\n  &lt;/tr&gt;\n&lt;/table&gt;</pre>", options:["1 column","2 columns","3 columns","6 columns"], correct:2, exp:"colspan=\"3\" stretches the header across the same width as the 3 data columns beneath it, so the table renders 3 columns wide overall."},
+{cat:"predict", q:"What marker will list items 1 and 2 actually display?<pre class=\"code-block\">&lt;ol type=\"A\" start=\"3\"&gt;\n  &lt;li&gt;First&lt;/li&gt;\n  &lt;li&gt;Second&lt;/li&gt;\n&lt;/ol&gt;</pre>", options:["A, B","C, D","3, 4","1, 2"], correct:1, exp:"type=\"A\" switches to uppercase letters, and start=\"3\" begins counting from the 3rd position in that sequence — letter 'C' — so the items show C and D."},
+{cat:"predict", q:"What marker style will \"Iron man 4\" get?<pre class=\"code-block\">&lt;ul&gt;\n  &lt;li&gt;Iron man\n    &lt;ol&gt;\n      &lt;li&gt;Iron man 1&lt;/li&gt;\n      &lt;ul&gt;\n        &lt;li&gt;Iron man 4&lt;/li&gt;\n      &lt;/ul&gt;\n    &lt;/ol&gt;\n  &lt;/li&gt;\n&lt;/ul&gt;</pre>", options:["A number, since it's technically nested inside an <ol>","A bullet, because its direct parent is a <ul>, overriding the surrounding <ol>'s numbering","No marker at all","A roman numeral"], correct:1, exp:"An <li>'s marker comes from its own direct parent list. 'Iron man 4' sits directly inside a nested <ul>, so it gets a bullet — the outer <ol> doesn't matter."},
+{cat:"predict", q:"Where will the small inner div appear inside the outer box?<pre class=\"code-block\">&lt;style&gt;\n  #main {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 200px;\n    width: 200px;\n  }\n&lt;/style&gt;\n&lt;div id=\"main\"&gt;\n  &lt;div id=\"child\"&gt;&lt;/div&gt;\n&lt;/div&gt;</pre>", options:["Top-left corner","Dead center, both horizontally and vertically","Stretched to fill the whole box","Bottom-right corner"], correct:1, exp:"justify-content:center centers along the main (horizontal) axis and align-items:center centers along the cross (vertical) axis, placing the child dead center."},
+{cat:"predict", q:"What shape does this render as?<pre class=\"code-block\">&lt;style&gt;\n  div {\n    height: 150px;\n    width: 150px;\n    border-radius: 50%;\n  }\n&lt;/style&gt;</pre>", options:["A perfect circle, since equal height and width with 50% radius rounds it fully","An oval, wider than tall","A rounded square with visible flat corners","No visible change from a plain square"], correct:0, exp:"border-radius:50% on an element with equal height and width produces a perfect circle."},
+{cat:"predict", q:"What shape does this render as?<pre class=\"code-block\">&lt;style&gt;\n  div {\n    height: 75px;\n    width: 150px;\n    border-radius: 50%;\n  }\n&lt;/style&gt;</pre>", options:["A perfect circle","An oval/ellipse, since the border-radius percentage is computed against unequal height and width","A rectangle with sharp corners","A triangle"], correct:1, exp:"When height and width differ, border-radius:50% rounds each axis independently against its own dimension, producing an ellipse rather than a circle."},
+{cat:"predict", q:"What is actually visible on this element?<pre class=\"code-block\">&lt;style&gt;\n  div {\n    height: 200px;\n    width: 200px;\n    background-image: url(\"photo.jpg\");\n  }\n&lt;/style&gt;</pre>", options:["A solid color box, since no background-color is set","The image from photo.jpg, positioned per default background rules","Nothing at all — background-color is required alongside background-image","A blank white box always"], correct:1, exp:"background-image alone is enough to display a picture; background-color is a separate, independent property (often used only as a visual fallback)."},
+{cat:"predict", q:"When the page loads and the user hasn't typed anything, what value does this input actually hold?<pre class=\"code-block\">&lt;input type=\"text\" placeholder=\"Enter your name\"&gt;</pre>", options:["The literal string 'Enter your name'","An empty string — placeholder text is just a visual hint, not a real value","null, causing a form error","The string 'undefined'"], correct:1, exp:"placeholder text is only displayed as a greyed-out hint; the input's actual value stays an empty string until the user types something."},
+{cat:"predict", q:"What happens when the user clicks 'Female' after already selecting 'Male'?<pre class=\"code-block\">&lt;input type=\"radio\" name=\"gender\" value=\"male\"&gt; Male\n&lt;input type=\"radio\" name=\"gender\" value=\"female\"&gt; Female</pre>", options:["Both stay selected at once","'Male' automatically deselects, since both radios share the same name and are mutually exclusive","Nothing happens, radios can't be changed once picked","An error is thrown"], correct:1, exp:"Radio buttons sharing the same <code>name</code> form a mutually exclusive group — selecting one clears any other selection in that group."},
+{cat:"predict", q:"What security risk exists with this link exactly as written?<pre class=\"code-block\">&lt;a href=\"https://example.com\" target=\"_blank\"&gt;Visit&lt;/a&gt;</pre>", options:["None, this is perfectly safe as written","The new page could access window.opener and manipulate the original tab, unless rel=\"noopener\" is added","The link simply won't open without rel","The browser blocks the link entirely"], correct:1, exp:"Without <code>rel=\"noopener\"</code>, a page opened via target=\"_blank\" can use window.opener to manipulate the tab that opened it — a known security gap."},
+{cat:"predict", q:"What color is the text inside the inner &lt;p&gt;?<pre class=\"code-block\">&lt;style&gt;\n  .outer { color: green; }\n&lt;/style&gt;\n&lt;div class=\"outer\"&gt;\n  &lt;p&gt;Hello&lt;/p&gt;\n&lt;/div&gt;</pre>", options:["Black, color never inherits", "Green, since color is an inherited property and the <p> sets no color of its own","Transparent","White"], correct:1, exp:"color is one of the CSS properties that inherits by default, so a child with no explicit color takes on its ancestor's computed color."},
+{cat:"predict", q:"What background color will the inner &lt;p&gt; actually have set on it?<pre class=\"code-block\">&lt;style&gt;\n  .outer { background-color: yellow; }\n&lt;/style&gt;\n&lt;div class=\"outer\"&gt;\n  &lt;p&gt;Hello&lt;/p&gt;\n&lt;/div&gt;</pre>", options:["Yellow, because background-color inherits like color does","Transparent — background-color is not inherited, so the parent's yellow only shows through underneath","Red by default","White, the browser default"], correct:1, exp:"Unlike <code>color</code>, <code>background-color</code> does not inherit. The <p> itself stays transparent; you simply see the parent's yellow showing through behind it."},
+{cat:"predict", q:"What actually happens to the inner div's rendered height here?<pre class=\"code-block\">&lt;div&gt;\n  &lt;div style=\"height: 50%; background: skyblue;\"&gt;&lt;/div&gt;\n&lt;/div&gt;</pre>", options:["It becomes 50% of the viewport height","It collapses to 0 height, since the parent div has no explicit height for the percentage to resolve against","It becomes exactly 50px","It causes a rendering error"], correct:1, exp:"A percentage height is calculated against the parent's height. With no height set on the outer div, 50% resolves to 0."},
+{cat:"predict", q:"With no <code>selected</code> attribute anywhere, which option is chosen by default when the page loads?<pre class=\"code-block\">&lt;select&gt;\n  &lt;option value=\"Lucknow\"&gt;Lucknow&lt;/option&gt;\n  &lt;option value=\"Goa\"&gt;Goa&lt;/option&gt;\n&lt;/select&gt;</pre>", options:["No option is chosen, the field stays blank","'Lucknow', the first option listed, is selected by default","'Goa', the last option listed, is selected by default","A random option each page load"], correct:1, exp:"Without a <code>selected</code> attribute on any &lt;option&gt;, the browser defaults to showing and selecting the first option in source order."},
+{cat:"predict", q:"When the page first loads, what state is this checkbox in?<pre class=\"code-block\">&lt;input type=\"checkbox\" id=\"terms\"&gt;</pre>", options:["Checked by default","Unchecked, unless the checked attribute is explicitly added","Disabled","Indeterminate"], correct:1, exp:"Checkboxes start unchecked by default unless the <code>checked</code> attribute is present in the markup."},
+{cat:"predict", q:"What is clickable in this markup?<pre class=\"code-block\">&lt;a href=\"movie.html\"&gt;\n  &lt;img src=\"poster.jpg\" alt=\"Poster\"&gt; Watch now\n&lt;/a&gt;</pre>", options:["Only the text 'Watch now' is clickable","Only the image is clickable","Both the image and the text are clickable, since both sit inside the same anchor","Neither is clickable, images can't nest inside <a>"], correct:2, exp:"Everything nested inside an &lt;a&gt; tag — including images and text together — becomes part of the same clickable link."},
+{cat:"predict", q:"What does the browser actually render from this snippet?<pre class=\"code-block\">&lt;p&gt;Visible text&lt;/p&gt;\n&lt;!-- &lt;p&gt;Hidden text&lt;/p&gt; --&gt;</pre>", options:["Both paragraphs render normally","Only 'Visible text' renders; the commented-out paragraph is never parsed as an element","Only 'Hidden text' renders","Neither renders, due to a syntax error"], correct:1, exp:"Content inside <code>&lt;!-- ... --&gt;</code> is excluded from the DOM entirely — it isn't just visually hidden, it's never parsed as HTML at all."},
+{cat:"predict", q:"What color wins here?<pre class=\"code-block\">&lt;style&gt;\n  p { color: blue !important; }\n  #note { color: red; }\n&lt;/style&gt;\n&lt;p id=\"note\"&gt;Text&lt;/p&gt;</pre>", options:["Red, since id selectors beat type selectors","Blue, because !important overrides normal specificity rules, even against a usually-stronger id selector","Black, the two rules cancel out","Purple, a blend of both"], correct:1, exp:"<code>!important</code> forces a declaration to override any other normal-weight rule regardless of specificity — even a normally-stronger id selector loses to it here."},
+{cat:"predict", q:"Without any custom CSS, which heading renders with the largest default text size?<pre class=\"code-block\">&lt;h1&gt;Title&lt;/h1&gt;\n&lt;h3&gt;Subtitle&lt;/h3&gt;\n&lt;h6&gt;Fine print&lt;/h6&gt;</pre>", options:["<h6>, higher numbers mean bigger by default","<h1>, since browsers apply progressively smaller default sizes from h1 down to h6","They're all the same size unless styled","<h3>, it's the middle ground"], correct:1, exp:"Browsers' default stylesheets give &lt;h1&gt; the largest font-size and shrink progressively down to &lt;h6&gt;, unless overridden by custom CSS."},
+{cat:"predict", q:"What appears where this iframe is placed?<pre class=\"code-block\">&lt;iframe src=\"https://example.com/map\" width=\"400\" height=\"300\"&gt;&lt;/iframe&gt;</pre>", options:["A plain hyperlink to the map","A live, embedded rendering of the linked page inside a 400×300 box on the current page","Nothing, src isn't a valid iframe attribute","A downloaded file"], correct:1, exp:"&lt;iframe&gt; embeds and renders another web page inline, at the given dimensions, right within the current document."},
+{cat:"predict", q:"What visual effect does the &lt;legend&gt; have here?<pre class=\"code-block\">&lt;fieldset&gt;\n  &lt;legend&gt;Contact Info&lt;/legend&gt;\n  &lt;input type=\"text\"&gt;\n&lt;/fieldset&gt;</pre>", options:["It renders as ordinary paragraph text below the fieldset","It appears as a caption embedded in the fieldset's border, labeling the group","It's invisible, only useful for screen readers","It replaces the input's placeholder"], correct:1, exp:"&lt;legend&gt; renders visually as a caption sitting on top of the &lt;fieldset&gt;'s border, labeling the grouped controls."},
+{cat:"predict", q:"What happens when the user clicks directly on the word \"Name:\" (the label text)?<pre class=\"code-block\">&lt;label for=\"name\"&gt;Name:&lt;/label&gt;\n&lt;input type=\"text\" id=\"name\"&gt;</pre>", options:["Nothing happens, clicking text never does anything","The text input gets focus, as if the user had clicked directly inside it","It submits the form","It clears the input"], correct:1, exp:"A &lt;label for=\"id\"&gt; associated with a matching input focuses that input when its label text is clicked, improving usability and click targets."},
+{cat:"predict", q:"Two elements accidentally share the same id. What does a CSS rule for <code>#one</code> actually target?<pre class=\"code-block\">&lt;p id=\"one\"&gt;First&lt;/p&gt;\n&lt;p id=\"one\"&gt;Second&lt;/p&gt;</pre>", options:["Both elements equally","Typically only the first matching element — duplicate ids are invalid HTML, even though browsers won't throw an error","Neither element; the page fails to render","Only the second element"], correct:1, exp:"IDs are supposed to be unique. Duplicate ids are invalid HTML, and while browsers don't error out, id-based selection generally only reliably addresses the first matching element."},
+{cat:"predict", q:"What shows on the page if the image at photo.jpg fails to load and no alt was given?<pre class=\"code-block\">&lt;img src=\"photo.jpg\"&gt;</pre>", options:["A broken-image icon with no descriptive text, since alt was omitted","The literal word 'photo.jpg' displayed as text","A blank, invisible space","An error dialog box"], correct:0, exp:"Without <code>alt</code> text, a failed image typically shows just the browser's broken-image icon, with nothing meaningful as fallback text."},
+{cat:"predict", q:"What width does this &lt;span&gt; occupy, assuming no CSS width is set?<pre class=\"code-block\">&lt;div style=\"width: 600px;\"&gt;\n  &lt;span&gt;short text&lt;/span&gt;\n&lt;/div&gt;</pre>", options:["600px wide, filling its block-level parent","Exactly as wide as its own content, since <span> is inline by default","0px wide","100vw wide"], correct:1, exp:"Inline elements like &lt;span&gt; only take up as much horizontal space as their content needs — they don't stretch to fill their parent's width like block-level elements do."},
+{cat:"predict", q:"What width does this &lt;div&gt; occupy, assuming no CSS width is set?<pre class=\"code-block\">&lt;body&gt;\n  &lt;div&gt;short text&lt;/div&gt;\n&lt;/body&gt;</pre>", options:["Only as wide as its text content","The full available width of its parent, since block-level elements stretch to fill by default","0px","Half the page"], correct:1, exp:"Block-level elements like &lt;div&gt; stretch to fill 100% of their parent's available width by default, and start on a new line."},
+{cat:"predict", q:"Which background color actually shows on the page?<pre class=\"code-block\">&lt;body bgcolor=\"pink\" style=\"background-color: skyblue;\"&gt;</pre>", options:["Pink, because bgcolor is processed first","Skyblue, because inline CSS overrides the legacy bgcolor HTML attribute","They blend into violet","Neither applies; body stays white"], correct:1, exp:"CSS — including an inline <code>style</code> attribute — takes precedence over the old presentational <code>bgcolor</code> attribute, so skyblue wins."},
+{cat:"predict", q:"What happens when this link is clicked?<pre class=\"code-block\">&lt;a href=\"mailto:hello@example.com\"&gt;Email me&lt;/a&gt;</pre>", options:["It navigates the current tab to a webpage called 'mailto'","It opens the user's default email client with a new message addressed to hello@example.com","It copies the email address to the clipboard","Nothing happens without JavaScript"], correct:1, exp:"The <code>mailto:</code> scheme instructs the browser to hand off to the system's default email application with the address pre-filled."},
+{cat:"predict", q:"On a desktop browser with no calling app configured, what typically happens when this link is clicked?<pre class=\"code-block\">&lt;a href=\"tel:+911234567890\"&gt;Call us&lt;/a&gt;</pre>", options:["It always successfully places a phone call","The browser may prompt for a calling app, or simply do nothing useful, since most desktops have no telephony app to hand off to","It sends a text message instead","It throws a JavaScript error"], correct:1, exp:"tel: links work best on phones. On a desktop without a calling application configured, the browser often can't do anything meaningful with the request."},
+{cat:"predict", q:"Does the inner &lt;ol&gt; inherit the type=\"A\" styling from the outer list?<pre class=\"code-block\">&lt;ol type=\"A\"&gt;\n  &lt;li&gt;Outer\n    &lt;ol&gt;\n      &lt;li&gt;Inner&lt;/li&gt;\n    &lt;/ol&gt;\n  &lt;/li&gt;\n&lt;/ol&gt;</pre>", options:["Yes, the inner list automatically uses letters too","No — each <ol> only applies its own type attribute; the inner list falls back to plain numbers since it sets none","The inner list gets no marker at all","It causes invalid HTML"], correct:1, exp:"The <code>type</code> attribute isn't inherited by nested lists; each &lt;ol&gt;/&lt;ul&gt; needs its own type set, otherwise it falls back to the default numeric or bullet marker."},
+{cat:"predict", q:"Will this div be horizontally centered on the page?<pre class=\"code-block\">&lt;style&gt;\n  div {\n    width: 300px;\n    margin: 0 auto;\n  }\n&lt;/style&gt;</pre>", options:["No, margin:auto only ever works vertically","Yes — on a block element with a defined width, left/right margin set to auto splits the remaining space evenly, centering it","Only if display:flex is also added","Only in older browsers"], correct:1, exp:"On a block element with an explicit width, setting left and right margins to <code>auto</code> distributes the remaining horizontal space evenly on both sides, centering it."},
+{cat:"predict", q:"Does <code>text-align: center;</code> on the parent center the child &lt;div&gt; itself (not just text)?<pre class=\"code-block\">&lt;style&gt;\n  .parent { text-align: center; }\n  .child { width: 100px; height: 100px; background: red; }\n&lt;/style&gt;\n&lt;div class=\"parent\"&gt;\n  &lt;div class=\"child\"&gt;&lt;/div&gt;\n&lt;/div&gt;</pre>", options:["Yes, text-align always centers any child element","No — text-align only centers inline/inline-block content; a block-level child with a fixed width ignores it","It centers only the first line of the child","It throws an error"], correct:1, exp:"text-align affects inline-level content (text, inline, inline-block elements). A block-level &lt;div&gt; child ignores it and needs margin:auto or flex/grid centering instead."},
+{cat:"predict", q:"What's visually different between these two tables if no CSS is applied?<pre class=\"code-block\">&lt;table&gt;...&lt;/table&gt;\n\nvs.\n\n&lt;table border=\"1\"&gt;...&lt;/table&gt;</pre>", options:["No visible difference, both look identical","The one with border=\"1\" shows visible grid lines around cells; the other has no visible borders by default","The one without border renders faster only","border=\"1\" makes the table transparent"], correct:1, exp:"By default, HTML tables render with no visible border. The legacy <code>border</code> attribute (or equivalent CSS) is needed to draw visible grid lines around cells."},
+{cat:"predict", q:"Which rule wins for this paragraph's color?<pre class=\"code-block\">&lt;style&gt;\n  .a.b { color: green; }\n  .a { color: orange; }\n&lt;/style&gt;\n&lt;p class=\"a b\"&gt;Text&lt;/p&gt;</pre>", options:["Orange, since .a is simpler and comes second in the file", "Green, because .a.b counts as two class selectors and is more specific than the single .a selector","They tie and default to black","Whichever rule loads first in the browser"], correct:1, exp:"Specificity counts the number of class selectors in a rule. <code>.a.b</code> (two classes) outranks <code>.a</code> alone (one class), regardless of declaration order."},
+{cat:"predict", q:"If the parent container is 400px wide, how wide will this image render?<pre class=\"code-block\">&lt;div style=\"width: 400px;\"&gt;\n  &lt;img src=\"pic.jpg\" style=\"width: 50%;\"&gt;\n&lt;/div&gt;</pre>", options:["50px","200px, since a percentage width on the image resolves against its containing block's width","400px, images ignore percentage widths","It depends only on the image's original file size"], correct:1, exp:"A percentage width on an image (or any block-level box) is calculated relative to its containing block — 50% of the 400px parent is 200px."},
+{cat:"predict", q:"What's the likely visual result on a phone if the viewport meta tag is left out of the &lt;head&gt;?<pre class=\"code-block\">&lt;head&gt;\n  &lt;title&gt;My Site&lt;/title&gt;\n&lt;/head&gt;</pre>", options:["The page looks identical on mobile and desktop","Mobile browsers often render the page at a wide, desktop-like virtual width and zoom out, making text tiny until the user pinch-zooms","The page fails to load entirely","All images disappear"], correct:1, exp:"Without a viewport meta tag, mobile browsers default to rendering at a wide virtual viewport (often ~980px) and scale it down, making everything appear small at first."},
+{cat:"predict", q:"What font-size does the &lt;html&gt; element itself end up with here, assuming a 16px browser default?<pre class=\"code-block\">&lt;style&gt;\n  html { font-size: 62.5%; }\n&lt;/style&gt;</pre>", options:["62.5px","10px, since 62.5% of the default 16px browser font-size is 10px","16px, percentages don't apply to html","0px"], correct:1, exp:"62.5% of the browser default 16px is 10px. This is a common trick that makes 1rem conveniently equal 10px afterward, for easier mental math."},
+{cat:"predict", q:"Which rule wins here?<pre class=\"code-block\">&lt;style&gt;\n  .warn { color: orange !important; }\n&lt;/style&gt;\n&lt;p class=\"warn\" style=\"color: red;\"&gt;Careful&lt;/p&gt;</pre>", options:["Red — inline styles always beat everything, no matter what","Orange — !important overrides even inline styles for that property","They blend into a mixed color","Black, since both are treated as invalid together"], correct:1, exp:"<code>!important</code> is one of the few things that can override even inline styles for that specific property, jumping to the top of the normal cascade."},
+{cat:"predict", q:"With no CSS applied, how does this link typically render by default in most browsers?<pre class=\"code-block\">&lt;a href=\"https://example.com\"&gt;Click here&lt;/a&gt;</pre>", options:["Plain black text with no distinguishing style","Blue, underlined text, since browsers apply default link styling","Red, bold text","Invisible until hovered"], correct:1, exp:"Unvisited links get a default style from the browser's built-in stylesheet — typically blue and underlined — unless overridden by custom CSS."},
+];
+
+/* ============================= STATE ============================= */
+let quizQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let userLog = []; // {q, chosenText, correctText, correct}
+
+const categoryLabels = {
+  structure:"document structure", text:"text formatting", semantic:"semantic html",
+  links:"links & anchors", images:"images", lists:"lists", tables:"tables",
+  forms:"forms & inputs", media:"embeds & media", selectors:"css selectors & specificity",
+  units:"css units & sizing", boxmodel:"box model & layout", general:"general html/css",
+  predict:"predict the output"
+};
+
+function renderTopicChips(){
+  const cats = [...new Set(BANK.map(q=>q.cat))];
+  document.getElementById('topicChips').innerHTML = cats.map(c=>`<span>${categoryLabels[c]||c}</span>`).join('');
+}
+renderTopicChips();
+
+// Escapes stray HTML (e.g. literal "<div>" option text) while preserving
+// the small set of tags we intentionally use for styling: <code> and <b>.
+function safeRender(str){
+  const placeholders = {};
+  let i = 0;
+  let temp = String(str).replace(/<\/?(code|hl|pre)(\s+[^<>]*)?>/g, m => {
+    const key = `\u0000${i}\u0000`;
+    placeholders[key] = m;
+    i++;
+    return key;
+  });
+  temp = temp.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  Object.keys(placeholders).forEach(key=>{
+    temp = temp.replace(key, placeholders[key]);
+  });
+  return temp;
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(){
+  const count = Math.min(parseInt(document.getElementById('countSelect').value,10), BANK.length);
+  const picked = shuffle(BANK).slice(0, count);
+  // shuffle each question's options while tracking the correct answer text
+  quizQuestions = picked.map(q=>{
+    const opts = q.options.map((text, idx)=>({text, isCorrect: idx===q.correct}));
+    const shuffled = shuffle(opts);
+    return {cat:q.cat, q:q.q, exp:q.exp, options:shuffled};
+  });
+  currentIndex = 0;
+  score = 0;
+  userLog = [];
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const total = quizQuestions.length;
+  const item = quizQuestions[currentIndex];
+  document.getElementById('progressFill').style.width = `${(currentIndex/total)*100}%`;
+  document.getElementById('qPosition').textContent = `Question ${currentIndex+1} / ${total}`;
+  document.getElementById('liveScore').textContent = `Score: ${score}`;
+  document.getElementById('qCat').textContent = categoryLabels[item.cat] || item.cat;
+  document.getElementById('qText').innerHTML = safeRender(item.q);
+  document.getElementById('explainBox').style.display = 'none';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = (currentIndex === total-1) ? 'See results →' : 'Next →';
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  item.options.forEach((opt, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${safeRender(opt.text)}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    box.appendChild(btn);
+  });
+}
+
+function selectAnswer(i){
+  const item = quizQuestions[currentIndex];
+  const buttons = document.querySelectorAll('#optionsBox .opt');
+  const chosen = item.options[i];
+  const correctIdx = item.options.findIndex(o=>o.isCorrect);
+
+  buttons.forEach(b=>b.disabled = true);
+  buttons[correctIdx].classList.add('correct');
+  if(!chosen.isCorrect){
+    buttons[i].classList.add('wrong');
+  }
+
+  const wasCorrect = chosen.isCorrect;
+  if(wasCorrect) score++;
+
+  userLog.push({
+    q: item.q,
+    chosenText: chosen.text,
+    correctText: item.options[correctIdx].text,
+    correct: wasCorrect,
+    cat: item.cat
+  });
+
+  document.getElementById('liveScore').textContent = `Score: ${score}`;
+  const exp = document.getElementById('explainBox');
+  exp.innerHTML = safeRender(item.exp);
+  exp.style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= quizQuestions.length){
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults(){
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+
+  const total = quizQuestions.length;
+  document.getElementById('finalScore').textContent = `${score} / ${total}`;
+  document.getElementById('finalPct').textContent = `${Math.round((score/total)*100)}% correct`;
+
+  // category breakdown
+  const byCat = {};
+  userLog.forEach(entry=>{
+    if(!byCat[entry.cat]) byCat[entry.cat] = {correct:0,total:0};
+    byCat[entry.cat].total++;
+    if(entry.correct) byCat[entry.cat].correct++;
+  });
+  const breakdown = document.getElementById('catBreakdown');
+  breakdown.innerHTML = Object.keys(byCat).map(cat=>{
+    const {correct,total} = byCat[cat];
+    return `<li><span>${categoryLabels[cat]||cat}</span><b>${correct}/${total}</b></li>`;
+  }).join('');
+
+  document.getElementById('reviewList').innerHTML = '';
+  document.getElementById('reviewList').style.display = 'none';
+  document.getElementById('reviewToggle').textContent = 'Review missed questions';
+}
+
+function toggleReview(){
+  const list = document.getElementById('reviewList');
+  const missed = userLog.filter(e=>!e.correct);
+  if(list.style.display === 'block'){
+    list.style.display = 'none';
+    document.getElementById('reviewToggle').textContent = 'Review missed questions';
+    return;
+  }
+  if(missed.length === 0){
+    list.innerHTML = `<div class="review-item"><p>No misses — clean sweep on this attempt.</p></div>`;
+  } else {
+    list.innerHTML = missed.map(e=>`
+      <div class="review-item">
+        <p>${safeRender(e.q)}</p>
+        <p class="ans">Your answer: <b class="no">${safeRender(e.chosenText)}</b> &nbsp;|&nbsp; Correct: <b class="ok">${safeRender(e.correctText)}</b></p>
+      </div>
+    `).join('');
+  }
+  list.style.display = 'block';
+  document.getElementById('reviewToggle').textContent = 'Hide review';
+}
+
+function restart(){
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+}
+</script>
+</body>
+</html>
